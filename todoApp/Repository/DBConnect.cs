@@ -16,9 +16,13 @@ namespace todoApp.Repository
         {
             dbConnect = new MySqlConnection(connString);
         }
-        public List<Models.Task> getTasks()
+        public List<Models.Task> getTasks(string order)
         {
             string procName = "procGetTasks";
+            if (order.Equals("asc"))
+            {
+                procName = "proceGetTasksByOldDate";
+            }
             //string sql = "select * from task;";
             List<Models.Task> taskList = dbConnect.Query<Models.Task>(procName,commandType:CommandType.StoredProcedure).ToList();
             return taskList;
@@ -43,6 +47,7 @@ namespace todoApp.Repository
             int result = dbConnect.Execute(procName,dynamic, commandType: CommandType.StoredProcedure);
             return result;
         }
+        
     }
     
 

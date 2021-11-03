@@ -13,10 +13,20 @@ namespace todoApp.Controllers
     public class TaskController : ControllerBase
     {
         DBConnect conn = new DBConnect();
+        [HttpGet("{order}")]
+        public IActionResult getTasks( string order)
+        {
+            if (order.Trim().Equals(""))
+            {
+                order = "desc";
+            }
+            List<Models.Task> list = conn.getTasks(order);
+            return StatusCode(200, list);
+        }
         [HttpGet]
         public IActionResult getTasks()
         {
-            List<Models.Task> list = conn.getTasks();
+            List<Models.Task> list = conn.getTasks("");
             return StatusCode(200, list);
         }
         [HttpPost]

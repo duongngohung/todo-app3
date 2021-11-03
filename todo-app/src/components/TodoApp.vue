@@ -13,26 +13,24 @@
       <div class="d-flex col-xl-12 row filter">
         <div id="leftFilter" class="col-xl-6"></div>
         <div id="rightFilter" class="d-flex col-xl-6 " >
-          <label for="cars" class="col-form-label text">Filter</label>
-          <select name="cars" id="cars" class="form-control col-xl-3">
+          <!-- <label for="cars" class="col-form-label text">Filter</label> -->
+          <!-- <select name="cars" id="cars" class="form-control col-xl-4">
             <option value="volvo">Volvo</option>
             <option value="saab">Saab</option>
             <option value="opel">Opel</option>
             <option value="audi">Audi</option>
-          </select>
+          </select> -->
           <label for="cars" class="col-form-label text">Sort</label>
-          <select name="cars" id="sort" class="form-control col-xl-3">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="opel">Opel</option>
-            <option value="audi">Audi</option>
+          <select name="cars" id="sort" class="form-control col-xl-5" @change="sortTask()">
+            <option value="desc" >Ngày mới nhất</option>
+            <option value="asc">Ngày cũ nhất</option>
           </select>
         </div>
         <div class="col-xl-12 checkTask">
           <div class="taskRow d-flex col-xl-12">
             <div class="col-xl-12 checkLeft">
               <div class=" task row " v-for="task in tasks" :key="task.taskId">
-                <input type="checkbox" class="form-control col-xl-1 inputCheck" v-model="task.status">
+                <input type="checkbox" class="form-control col-xl-1 inputCheck" v-model="task.status" @click="updateStatus(task)">
                 <label for="" class="col-form-label col-xl-8" :class="{'statusChecked' : task.status}">{{task.taskName}}</label>
                 <div class="createdDate col-xl-2">
                    {{formatDate(task.createdDate)}}
@@ -128,6 +126,21 @@
       updateTask(task){
         this.task = task;
         this.task.isUpdate = true;
+      },
+      async updateStatus(task){
+      task.status = !task.status;
+      await axios.put('http://localhost:41813/api/task', task).then((result)=>{
+              if(result.data > 0){
+                //this.loadData();
+              }
+            })
+      },
+      async sortTask(){
+        var order = document.getElementById("sort").value;
+        await axios.get('http://localhost:41813/api/task/' + order).then((result)=>{
+          console.log(result.data);
+          this.tasks = result.data;
+        });
       }
     },
     async created() {
@@ -141,6 +154,7 @@
       }
       console.log(this.tasks);
     },
+   
   }
 </script>
     
@@ -172,6 +186,11 @@
   margin-left: 15px !important;
   margin-right: 8px !important;
   width: 100px !important;
+
+}
+#rightFilter {
+    display: flex ;
+    justify-content: flex-end !important;
 }
 .inputCheck{
   width: 20px;
