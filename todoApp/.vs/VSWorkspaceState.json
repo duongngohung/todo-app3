@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Controllers",
+    "\\Models",
+    "\\obj",
+    "\\Repository",
+    "\\todoApp"
+  ],
+  "SelectedNode": "\\Repository\\DBConnect.cs",
+  "PreviewInSolutionExplorer": false
+}
